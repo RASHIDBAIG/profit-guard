@@ -239,21 +239,19 @@ st.markdown("""
     header a[href*="github.com"] {display: none !important;}
     header a[href*="streamlit.io"] {display: none !important;}
     
-    /* ===== SIDEBAR TOGGLE - CENTERED VERTICALLY ===== */
+    /* ===== SIDEBAR TOGGLE - ALWAYS OUTSIDE, VERTICALLY CENTERED ===== */
+    
+    /* Button when sidebar is CLOSED */
     [data-testid="stSidebarCollapsedControl"],
     [data-testid="collapsedControl"] {
         display: flex !important;
         visibility: visible !important;
         opacity: 1 !important;
-        z-index: 999 !important;
-        
-        /* Center vertically */
+        z-index: 999999 !important;
         top: 50% !important;
         transform: translateY(-50%) !important;
         position: fixed !important;
         left: 10px !important;
-        
-        /* Style */
         background-color: #1DB954 !important;
         border-radius: 50% !important;
         width: 44px !important;
@@ -264,12 +262,30 @@ st.markdown("""
         justify-content: center !important;
     }
     
-    [data-testid="stSidebarCollapsedControl"]:hover,
-    [data-testid="collapsedControl"]:hover {
+    /* Button when sidebar is OPEN - move it OUTSIDE the sidebar */
+    [data-testid="stSidebarCollapseButton"] {
+        position: fixed !important;
+        top: 50% !important;
+        left: 340px !important;
+        transform: translateY(-50%) !important;
+        z-index: 999999 !important;
+        background-color: #1DB954 !important;
+        border-radius: 50% !important;
+        width: 44px !important;
+        height: 44px !important;
+        box-shadow: 0 4px 12px rgba(29,185,84,0.5) !important;
+        border: 2px solid white !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    [data-testid="stSidebarCollapseButton"]:hover {
         background-color: #16a34a !important;
         transform: translateY(-50%) scale(1.1) !important;
     }
     
+    [data-testid="stSidebarCollapseButton"] button,
     [data-testid="stSidebarCollapsedControl"] button,
     [data-testid="collapsedControl"] button {
         background: transparent !important;
@@ -278,12 +294,20 @@ st.markdown("""
         padding: 0 !important;
     }
     
+    [data-testid="stSidebarCollapseButton"] svg,
     [data-testid="stSidebarCollapsedControl"] svg,
     [data-testid="collapsedControl"] svg {
         fill: white !important;
         color: white !important;
         width: 22px !important;
         height: 22px !important;
+    }
+    
+    /* Hide the OLD inside-sidebar collapse button */
+    [data-testid="stSidebarHeader"] [data-testid="stSidebarCollapseButton"],
+    section[data-testid="stSidebar"] > div:first-child > button {
+        position: fixed !important;
+        left: 340px !important;
     }
     
     .main-header {
@@ -322,9 +346,16 @@ st.markdown("""
         }
         
         [data-testid="stSidebarCollapsedControl"],
-        [data-testid="collapsedControl"] {
+        [data-testid="collapsedControl"],
+        [data-testid="stSidebarCollapseButton"] {
             width: 50px !important;
             height: 50px !important;
+            left: 10px !important;
+        }
+        
+        [data-testid="stSidebarCollapseButton"] {
+            left: auto !important;
+            right: 10px !important;
         }
     }
 </style>
