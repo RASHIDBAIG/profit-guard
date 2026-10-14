@@ -180,25 +180,30 @@ def send_ga_event(event_name, params=None):
 
 st.markdown("""
 <style>
-    /* HIDE entire header (removes Share, Star, Edit, GitHub icons) */
-    header {
-        visibility: hidden;
-        height: 0;
-    }
+    /* Hide ONLY specific icons - NOT the whole header */
+    #MainMenu {visibility: hidden !important;}
+    footer {visibility: hidden !important;}
+    .stDeployButton {display: none !important;}
     
-    /* BUT keep sidebar toggle button visible */
-    header [data-testid="stSidebarCollapsedControl"],
-    header [data-testid="collapsedControl"],
-    header button[data-testid="stBaseButton-headerNoPadding"],
-    [data-testid="stSidebarCollapsedControl"],
-    [data-testid="collapsedControl"] {
-        visibility: visible !important;
-        display: block !important;
-    }
+    /* Hide top-right toolbar (Share, Star, Edit, GitHub) */
+    [data-testid="stToolbar"] {display: none !important;}
+    [data-testid="stToolbarActions"] {display: none !important;}
+    [data-testid="stAppToolbar"] {display: none !important;}
+    [data-testid="stAppDeployButton"] {display: none !important;}
+    [data-testid="stStatusWidget"] {display: none !important;}
+    [data-testid="stDecoration"] {display: none !important;}
+    [data-testid="manage-app-button"] {display: none !important;}
     
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    .stDeployButton {display: none;}
+    /* Hide specific header buttons by href/title */
+    header a[href*="github.com"] {display: none !important;}
+    header a[href*="streamlit.io"] {display: none !important;}
+    header button[title*="Manage"] {display: none !important;}
+    header button[title*="Deploy"] {display: none !important;}
+    
+    /* Hide "Share", "Star", "Edit" - buttons */
+    header button[kind="header"]:not([data-testid="stBaseButton-headerNoPadding"]) {
+        display: none !important;
+    }
     
     .main-header {
         background: linear-gradient(90deg, #1DB954 0%, #191414 100%);
