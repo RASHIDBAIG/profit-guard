@@ -239,86 +239,42 @@ st.markdown("""
     header a[href*="github.com"] {display: none !important;}
     header a[href*="streamlit.io"] {display: none !important;}
     
-    /* ===== SIDEBAR with green border ===== */
+    /* ===== SIDEBAR - Always Open, No Collapse ===== */
     section[data-testid="stSidebar"] {
         min-width: 340px !important;
         max-width: 340px !important;
         width: 340px !important;
         border-right: 3px solid #1DB954 !important;
-        overflow: visible !important;
+        transform: none !important;
+        margin-left: 0 !important;
+        display: block !important;
+        visibility: visible !important;
     }
     
-    /* ===== FORCE ALL TOGGLE BUTTONS OUTSIDE - right edge, vertically centered ===== */
+    /* HIDE both toggle buttons - no fold/unfold */
     [data-testid="stSidebarCollapseButton"],
     [data-testid="stSidebarCollapsedControl"],
     [data-testid="collapsedControl"],
     section[data-testid="stSidebar"] button[kind="header"],
     section[data-testid="stSidebar"] [data-testid="stSidebarHeader"] button {
-        position: fixed !important;
-        top: 50% !important;
-        left: 340px !important;
-        transform: translate(-50%, -50%) !important;
-        z-index: 9999999 !important;
-        
-        background-color: #1DB954 !important;
-        color: white !important;
-        border-radius: 50% !important;
-        width: 40px !important;
-        height: 40px !important;
-        min-width: 40px !important;
-        min-height: 40px !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        
-        box-shadow: 0 4px 15px rgba(29,185,84,0.6) !important;
-        border: 3px solid white !important;
-        
-        display: flex !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        align-items: center !important;
-        justify-content: center !important;
-        cursor: pointer !important;
+        display: none !important;
+        visibility: hidden !important;
     }
     
-    [data-testid="stSidebarCollapseButton"]:hover,
-    [data-testid="stSidebarCollapsedControl"]:hover,
-    [data-testid="collapsedControl"]:hover,
-    section[data-testid="stSidebar"] button[kind="header"]:hover {
-        background-color: #16a34a !important;
-        transform: translate(-50%, -50%) scale(1.15) !important;
-    }
-    
-    /* Hide button's inner content styling */
-    [data-testid="stSidebarCollapseButton"] button,
-    [data-testid="stSidebarCollapsedControl"] button,
-    [data-testid="collapsedControl"] button,
-    section[data-testid="stSidebar"] button[kind="header"] button {
-        background: transparent !important;
-        border: none !important;
-        color: white !important;
-        padding: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }
-    
-    [data-testid="stSidebarCollapseButton"] svg,
-    [data-testid="stSidebarCollapsedControl"] svg,
-    [data-testid="collapsedControl"] svg,
-    section[data-testid="stSidebar"] button[kind="header"] svg {
-        fill: white !important;
-        color: white !important;
-        width: 18px !important;
-        height: 18px !important;
-    }
-    
-    /* Make sure sidebar header doesn't hide button */
-    section[data-testid="stSidebar"] [data-testid="stSidebarHeader"] {
-        overflow: visible !important;
-        position: relative !important;
+    /* Show green dot decoration on border (optional) */
+    section[data-testid="stSidebar"]::after {
+        content: "";
+        position: fixed;
+        top: 50%;
+        left: 340px;
+        transform: translateY(-50%);
+        width: 12px;
+        height: 12px;
+        background-color: #1DB954;
+        border-radius: 50%;
+        box-shadow: 0 0 15px rgba(29,185,84,0.8);
+        z-index: 999;
+        pointer-events: none;
     }
     
     .main-header {
@@ -340,7 +296,7 @@ st.markdown("""
         background-color: #f0f2f6 !important;
     }
     
-    /* Mobile */
+    /* Mobile - allow collapse on small screens */
     @media (max-width: 768px) {
         .main-header { padding: 12px !important; }
         .main-header h1 { font-size: 22px !important; }
@@ -350,13 +306,24 @@ st.markdown("""
             min-height: 44px !important;
         }
         
-        [data-testid="stSidebarCollapseButton"],
+        /* On mobile, show toggle button */
         [data-testid="stSidebarCollapsedControl"],
-        [data-testid="collapsedControl"],
-        section[data-testid="stSidebar"] button[kind="header"] {
-            left: 10px !important;
+        [data-testid="collapsedControl"] {
+            display: flex !important;
+            visibility: visible !important;
+            position: fixed !important;
             top: 50% !important;
-            transform: translate(0, -50%) !important;
+            left: 10px !important;
+            transform: translateY(-50%) !important;
+            background-color: #1DB954 !important;
+            border-radius: 50% !important;
+            width: 48px !important;
+            height: 48px !important;
+            z-index: 999999 !important;
+            border: 3px solid white !important;
+            box-shadow: 0 4px 12px rgba(29,185,84,0.6) !important;
+            align-items: center !important;
+            justify-content: center !important;
         }
     }
 </style>
