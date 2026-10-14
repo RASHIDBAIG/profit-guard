@@ -223,12 +223,12 @@ def send_ga_event(event_name, params=None):
 
 st.markdown("""
 <style>
-    /* Hide only menu and footer - NOT the header */
+    /* Hide only menu and footer */
     #MainMenu {visibility: hidden !important;}
     footer {visibility: hidden !important;}
     .stDeployButton {display: none !important;}
     
-    /* Hide ONLY the top-right toolbar icons (Share, Star, Edit, GitHub) */
+    /* Hide top-right toolbar icons */
     [data-testid="stToolbar"] {display: none !important;}
     [data-testid="stToolbarActions"] {display: none !important;}
     [data-testid="stAppToolbar"] {display: none !important;}
@@ -236,19 +236,54 @@ st.markdown("""
     [data-testid="stDecoration"] {display: none !important;}
     [data-testid="manage-app-button"] {display: none !important;}
     [data-testid="stAppDeployButton"] {display: none !important;}
-    
-    /* Hide specific links */
     header a[href*="github.com"] {display: none !important;}
     header a[href*="streamlit.io"] {display: none !important;}
     
-    /* IMPORTANT: Keep sidebar toggle visible always */
+    /* ===== SIDEBAR TOGGLE - CENTERED VERTICALLY ===== */
     [data-testid="stSidebarCollapsedControl"],
-    [data-testid="collapsedControl"],
-    button[data-testid="stBaseButton-headerNoPadding"] {
+    [data-testid="collapsedControl"] {
         display: flex !important;
         visibility: visible !important;
         opacity: 1 !important;
         z-index: 999 !important;
+        
+        /* Center vertically */
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        position: fixed !important;
+        left: 10px !important;
+        
+        /* Style */
+        background-color: #1DB954 !important;
+        border-radius: 50% !important;
+        width: 44px !important;
+        height: 44px !important;
+        box-shadow: 0 4px 12px rgba(29,185,84,0.5) !important;
+        border: 2px solid white !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    [data-testid="stSidebarCollapsedControl"]:hover,
+    [data-testid="collapsedControl"]:hover {
+        background-color: #16a34a !important;
+        transform: translateY(-50%) scale(1.1) !important;
+    }
+    
+    [data-testid="stSidebarCollapsedControl"] button,
+    [data-testid="collapsedControl"] button {
+        background: transparent !important;
+        border: none !important;
+        color: white !important;
+        padding: 0 !important;
+    }
+    
+    [data-testid="stSidebarCollapsedControl"] svg,
+    [data-testid="collapsedControl"] svg {
+        fill: white !important;
+        color: white !important;
+        width: 22px !important;
+        height: 22px !important;
     }
     
     .main-header {
@@ -276,7 +311,7 @@ st.markdown("""
         background-color: #f0f2f6 !important;
     }
     
-    /* Mobile responsiveness */
+    /* Mobile */
     @media (max-width: 768px) {
         .main-header { padding: 12px !important; }
         .main-header h1 { font-size: 22px !important; }
@@ -284,6 +319,12 @@ st.markdown("""
         .stButton > button {
             width: 100% !important;
             min-height: 44px !important;
+        }
+        
+        [data-testid="stSidebarCollapsedControl"],
+        [data-testid="collapsedControl"] {
+            width: 50px !important;
+            height: 50px !important;
         }
     }
 </style>
