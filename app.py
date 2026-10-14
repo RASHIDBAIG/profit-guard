@@ -25,6 +25,55 @@ YOUTUBE_VIDEO = "https://www.youtube.com/watch?v=vh3ZD-YLqPo"
 
 st.set_page_config(page_title="Profit Guard", page_icon="rocket", layout="wide", initial_sidebar_state="expanded")
 
+# Hide Streamlit Cloud top-right icons
+st.markdown("""
+<script id="hide-streamlit-icons">
+(function() {
+    function hideIcons() {
+        // Hide Share, Star, Edit, GitHub icons
+        var selectors = [
+            '[data-testid="stToolbar"]',
+            '[data-testid="stAppToolbar"]',
+            '[data-testid="stToolbarActions"]',
+            '.stAppToolbar',
+            '[data-testid="stManageApp"]',
+            'header a[href*="github"]',
+            'header a[href*="streamlit"]',
+        ];
+        
+        selectors.forEach(function(sel) {
+            document.querySelectorAll(sel).forEach(function(el) {
+                el.style.display = 'none';
+                el.style.visibility = 'hidden';
+            });
+        });
+        
+        // Hide buttons with text "Share" or "Star"
+        document.querySelectorAll('header button, header a').forEach(function(el) {
+            var txt = (el.textContent || '').trim().toLowerCase();
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            var title = (el.getAttribute('title') || '').toLowerCase();
+            var aria = (el.getAttribute('aria-label') || '').toLowerCase();
+            
+            if (txt === 'share' || txt === 'star' || 
+                href.includes('github') || href.includes('streamlit') ||
+                title.includes('share') || title.includes('edit') || title.includes('manage') ||
+                aria.includes('share') || aria.includes('edit') || aria.includes('manage')) {
+                el.style.display = 'none';
+            }
+        });
+    }
+    
+    // Run immediately and repeatedly
+    hideIcons();
+    setTimeout(hideIcons, 500);
+    setTimeout(hideIcons, 1500);
+    setTimeout(hideIcons, 3000);
+    setInterval(hideIcons, 2000);
+})();
+</script>
+""", unsafe_allow_html=True)
+
 # Force mobile sidebar toggle + hide GitHub badge
 st.markdown("""
 <script id="force-toggle-visible">
