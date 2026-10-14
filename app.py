@@ -85,8 +85,44 @@ def send_ga_event(event_name, params=None):
 st.markdown("""
 <style>
     #MainMenu {visibility: hidden;}
-    header {visibility: hidden;}
     footer {visibility: hidden;}
+    /* Hide header content but keep hamburger for mobile */
+    header [data-testid="stToolbar"] {display: none !important;}
+    header [data-testid="stDecoration"] {display: none !important;}
+    header [data-testid="stStatusWidget"] {display: none !important;}
+    header .stDeployButton {display: none !important;}
+    header button[kind="header"] {display: none !important;}
+    /* Keep mobile hamburger visible */
+    [data-testid="stSidebarCollapsedControl"] {
+        display: block !important;
+        visibility: visible !important;
+    }
+    [data-testid="collapsedControl"] {
+        display: block !important;
+        visibility: visible !important;
+    }
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .main-header { padding: 12px !important; }
+        .main-header h1 { font-size: 22px !important; }
+        .main-header p { font-size: 12px !important; }
+        .stButton > button {
+            width: 100% !important;
+            min-height: 44px !important;
+            font-size: 14px !important;
+        }
+        .stTextInput > div > input {
+            min-height: 44px !important;
+            font-size: 16px !important;
+        }
+        .stSelectbox > div > div { min-height: 44px !important; }
+        [data-testid="stMetricValue"] { font-size: 20px !important; }
+        [data-testid="stMetricLabel"] { font-size: 12px !important; }
+        .stTabs [data-baseweb="tab"] {
+            font-size: 13px !important;
+            padding: 8px 12px !important;
+        }
+    }
     .stDeployButton {display: none;}
     [data-testid="stToolbar"] {display: none;}
     [data-testid="stDecoration"] {display: none;}
