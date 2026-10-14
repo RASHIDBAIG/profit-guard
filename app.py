@@ -244,71 +244,59 @@ st.markdown("""
         min-width: 340px !important;
         max-width: 340px !important;
         width: 340px !important;
-        border-right: 4px solid #1DB954 !important;
-        box-shadow: 4px 0 20px rgba(29,185,84,0.3) !important;
-        position: relative !important;
+        border-right: 3px solid #1DB954 !important;
     }
     
-    /* ===== TOGGLE BUTTON - On the sidebar border, vertically centered ===== */
+    /* ===== TOGGLE BUTTON - Always floating OUTSIDE sidebar, vertically centered ===== */
     
-    /* When sidebar is CLOSED */
     [data-testid="stSidebarCollapsedControl"],
     [data-testid="collapsedControl"] {
         display: flex !important;
         visibility: visible !important;
         opacity: 1 !important;
-        z-index: 999999 !important;
+        z-index: 9999999 !important;
         position: fixed !important;
         top: 50% !important;
-        left: 336px !important;
+        left: 12px !important;
         transform: translateY(-50%) !important;
         background-color: #1DB954 !important;
         border-radius: 50% !important;
-        width: 40px !important;
-        height: 40px !important;
-        box-shadow: 0 4px 12px rgba(29,185,84,0.6) !important;
+        width: 44px !important;
+        height: 44px !important;
+        box-shadow: 0 4px 15px rgba(29,185,84,0.6) !important;
         border: 3px solid white !important;
         align-items: center !important;
         justify-content: center !important;
-        transition: all 0.3s ease !important;
+        transition: all 0.2s ease !important;
     }
     
-    /* When sidebar is OPEN - button stays on border */
-    [data-testid="stSidebarCollapseButton"] {
-        position: fixed !important;
-        top: 50% !important;
-        left: 322px !important;
-        transform: translateY(-50%) !important;
-        z-index: 999999 !important;
-        background-color: #1DB954 !important;
-        border-radius: 50% !important;
-        width: 40px !important;
-        height: 40px !important;
-        box-shadow: 0 4px 12px rgba(29,185,84,0.6) !important;
-        border: 3px solid white !important;
+    /* When sidebar is OPEN - hide the floating button, show inside one */
+    section[data-testid="stSidebar"] ~ [data-testid="stSidebarCollapsedControl"],
+    section[data-testid="stSidebar"] ~ [data-testid="collapsedControl"] {
+        display: none !important;
+    }
+    
+    /* When sidebar is OPEN - collapse button inside at top */
+    [data-testid="stSidebarCollapseButton"],
+    section[data-testid="stSidebar"] button[kind="header"] {
         display: flex !important;
+        visibility: visible !important;
+        background-color: #1DB954 !important;
+        color: white !important;
+        border-radius: 50% !important;
+        width: 36px !important;
+        height: 36px !important;
+        border: 2px solid white !important;
         align-items: center !important;
         justify-content: center !important;
-        transition: all 0.3s ease !important;
+        margin: 8px !important;
     }
     
     [data-testid="stSidebarCollapseButton"]:hover,
     [data-testid="stSidebarCollapsedControl"]:hover,
     [data-testid="collapsedControl"]:hover {
         background-color: #16a34a !important;
-        transform: translateY(-50%) scale(1.15) !important;
-        box-shadow: 0 6px 20px rgba(29,185,84,0.8) !important;
-    }
-    
-    [data-testid="stSidebarCollapseButton"] button,
-    [data-testid="stSidebarCollapsedControl"] button,
-    [data-testid="collapsedControl"] button {
-        background: transparent !important;
-        border: none !important;
-        color: white !important;
-        padding: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
+        transform: translateY(-50%) scale(1.1) !important;
     }
     
     [data-testid="stSidebarCollapseButton"] svg,
@@ -316,22 +304,6 @@ st.markdown("""
     [data-testid="collapsedControl"] svg {
         fill: white !important;
         color: white !important;
-        width: 20px !important;
-        height: 20px !important;
-    }
-    
-    /* Hide the inside-header collapse button */
-    section[data-testid="stSidebar"] [data-testid="stSidebarHeader"] button {
-        position: fixed !important;
-        top: 50% !important;
-        left: 322px !important;
-        transform: translateY(-50%) !important;
-        background-color: #1DB954 !important;
-        border-radius: 50% !important;
-        width: 40px !important;
-        height: 40px !important;
-        border: 3px solid white !important;
-        z-index: 999999 !important;
     }
     
     .main-header {
@@ -361,25 +333,6 @@ st.markdown("""
         .stButton > button {
             width: 100% !important;
             min-height: 44px !important;
-        }
-        
-        [data-testid="stSidebarCollapsedControl"],
-        [data-testid="collapsedControl"] {
-            left: 10px !important;
-            top: 15px !important;
-            transform: none !important;
-            width: 48px !important;
-            height: 48px !important;
-        }
-        
-        [data-testid="stSidebarCollapseButton"],
-        section[data-testid="stSidebar"] [data-testid="stSidebarHeader"] button {
-            left: auto !important;
-            right: 10px !important;
-            top: 15px !important;
-            transform: none !important;
-            width: 48px !important;
-            height: 48px !important;
         }
     }
 </style>
