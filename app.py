@@ -42,6 +42,25 @@ if "ga_client_id" not in st.session_state:
 
 GA_CLIENT_ID = st.session_state.ga_client_id
 
+def fetch_user_logs():
+    """Fetch user logs from Google Sheet via Apps Script doGet"""
+    try:
+        webhook = st.secrets["tracking"]["webhook_url"]
+        if "YOUR_SCRIPT_ID" in webhook:
+            return None
+        r = requests.get(webhook, timeout=10)
+        if r.status_code == 200:
+            data = r.json()
+            if isinstance(data, list) and len(data) > 0:
+                df = pd.DataFrame(data)
+                return df
+            else:
+                return pd.DataFrame()
+        return None
+    except Exception:
+        return None
+
+
 def send_ga_event(event_name, params=None):
     if not GA_ID or not GA_API_SECRET:
         return
@@ -1299,6 +1318,76 @@ elif option == "Admin (Private)":
                 st.write("Complete user activity is stored in your Google Sheet (via webhook_url in secrets).")
                 st.write("Setup: Sheet banao, Apps Script me doPost function add karo, Deploy as Web App, URL secrets.toml me daalo.")
 
+                st.markdown("---")
+                st.markdown("### User Activity Logs (Live)")
+                
+                col_a, col_b = st.columns([1, 3])
+                with col_a:
+                    if st.button("Refresh Logs", use_container_width=True):
+                        st.session_state.logs_loaded = True
+                        st.rerun()
+                with col_b:
+                    st.caption("Google Sheet se latest data fetch karta hai")
+                
+                if st.session_state.get("logs_loaded"):
+                    with st.spinner("Fetching logs from Google Sheet..."):
+                        logs_df = fetch_user_logs()
+                    
+                    if logs_df is None or len(logs_df) == 0:
+                        st.warning("No logs found. Webhook URL check karo.")
+                    else:
+                        st.success("Total " + str(len(logs_df)) + " events loaded")
+                        
+                        f1, f2, f3 = st.columns(3)
+                        with f1:
+                            actions = ["All"] + sorted(logs_df["action"].unique().tolist()) if "action" in logs_df.columns else ["All"]
+                            filter_action = st.selectbox("Filter by Action", actions)
+                        with f2:
+                            sessions = ["All"] + sorted(logs_df["session_id"].unique().tolist()) if "session_id" in logs_df.columns else ["All"]
+                            filter_session = st.selectbox("Filter by Session", sessions)
+                        with f3:
+                            limit = st.number_input("Show last N rows", value=100, min_value=10, max_value=5000, step=50)
+                        
+                        filtered = logs_df.copy()
+                        if filter_action != "All" and "action" in filtered.columns:
+                            filtered = filtered[filtered["action"] == filter_action]
+                        if filter_session != "All" and "session_id" in filtered.columns:
+                            filtered = filtered[filtered["session_id"] == filter_session]
+                        
+                        filtered = filtered.tail(int(limit))
+                        
+                        m1, m2, m3, m4 = st.columns(4)
+                        if "session_id" in logs_df.columns:
+                            m1.metric("Total Users", logs_df["session_id"].nunique())
+                        if "action" in logs_df.columns:
+                            m2.metric("Total Events", len(logs_df))
+                            m3.metric("Unique Actions", logs_df["action"].nunique())
+                        if "timestamp" in logs_df.columns:
+                            m4.metric("Latest", str(logs_df["timestamp"].iloc[-1])[:16])
+                        
+                        st.markdown("---")
+                        st.dataframe(filtered, use_container_width=True, height=400)
+                        
+                        st.markdown("### Per-User Summary")
+                        if "session_id" in logs_df.columns and "action" in logs_df.columns:
+                            session_summary = logs_df.groupby("session_id").agg({
+                                "action": "count",
+                                "timestamp": ["min", "max"]
+                            }).reset_index()
+                            session_summary.columns = ["Session ID", "Total Events", "First Seen", "Last Seen"]
+                            session_summary = session_summary.sort_values("Last Seen", ascending=False)
+                            st.dataframe(session_summary, use_container_width=True)
+                        
+                        if st.download_button(
+                            "Download Full Logs (CSV)",
+                            data=filtered.to_csv(index=False).encode('utf-8'),
+                            file_name="profit_guard_user_logs.csv",
+                            mime="text/csv"
+                        ):
+                            pass
+                else:
+                    st.info("Click Refresh Logs to load user activity from Google Sheet.")
+                
                 st.markdown("---")
                 st.markdown("### Help Video")
                 st.video(YOUTUBE_VIDEO)
