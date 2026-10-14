@@ -113,6 +113,31 @@ st.markdown("""
     section[data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:hover {
         background-color: #f0f2f6 !important;
     }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .main-header { padding: 12px !important; }
+        .main-header h1 { font-size: 22px !important; }
+        .main-header p { font-size: 12px !important; }
+        .stButton > button {
+            width: 100% !important;
+            min-height: 44px !important;
+            font-size: 14px !important;
+        }
+        .stTextInput > div > input {
+            min-height: 44px !important;
+            font-size: 16px !important;
+        }
+        .stSelectbox > div > div { min-height: 44px !important; }
+        .stFileUploader { padding: 10px !important; }
+        [data-testid="stMetricValue"] { font-size: 20px !important; }
+        [data-testid="stMetricLabel"] { font-size: 12px !important; }
+        .stDataFrame { font-size: 12px !important; }
+        .stTabs [data-baseweb="tab"] {
+            font-size: 13px !important;
+            padding: 8px 12px !important;
+        }
+    }
 </style>
 """, unsafe_allow_html=True)
 
