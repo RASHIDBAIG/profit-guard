@@ -84,50 +84,17 @@ def send_ga_event(event_name, params=None):
 
 st.markdown("""
 <style>
+    /* Hide top-right menu and footer only - NOT the header */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    /* Hide header content but keep hamburger for mobile */
-    header [data-testid="stToolbar"] {display: none !important;}
-    header [data-testid="stDecoration"] {display: none !important;}
-    header [data-testid="stStatusWidget"] {display: none !important;}
-    header .stDeployButton {display: none !important;}
-    header button[kind="header"] {display: none !important;}
-    /* Keep mobile hamburger visible */
-    [data-testid="stSidebarCollapsedControl"] {
-        display: block !important;
-        visibility: visible !important;
-    }
-    [data-testid="collapsedControl"] {
-        display: block !important;
-        visibility: visible !important;
-    }
-    /* Mobile responsiveness */
-    @media (max-width: 768px) {
-        .main-header { padding: 12px !important; }
-        .main-header h1 { font-size: 22px !important; }
-        .main-header p { font-size: 12px !important; }
-        .stButton > button {
-            width: 100% !important;
-            min-height: 44px !important;
-            font-size: 14px !important;
-        }
-        .stTextInput > div > input {
-            min-height: 44px !important;
-            font-size: 16px !important;
-        }
-        .stSelectbox > div > div { min-height: 44px !important; }
-        [data-testid="stMetricValue"] { font-size: 20px !important; }
-        [data-testid="stMetricLabel"] { font-size: 12px !important; }
-        .stTabs [data-baseweb="tab"] {
-            font-size: 13px !important;
-            padding: 8px 12px !important;
-        }
-    }
-    .stDeployButton {display: none;}
-    [data-testid="stToolbar"] {display: none;}
-    [data-testid="stDecoration"] {display: none;}
-    [data-testid="stStatusWidget"] {display: none;}
-    [data-testid="baseButton-header"] {display: none;}
+    .stDeployButton {display: none !important;}
+    [data-testid="stToolbar"] {display: none !important;}
+    [data-testid="stDecoration"] {display: none !important;}
+    [data-testid="stStatusWidget"] {display: none !important;}
+    [data-testid="stAppDeployButton"] {display: none !important;}
+    [data-testid="stBaseButton-header"] {display: none !important;}
+    [data-testid="baseButton-header"] {display: none !important;}
+    
     .main-header {
         background: linear-gradient(90deg, #1DB954 0%, #191414 100%);
         padding: 20px;
@@ -135,43 +102,54 @@ st.markdown("""
         color: white;
         margin-bottom: 20px;
     }
+    
     section[data-testid="stSidebar"] {
         min-width: 340px !important;
         max-width: 340px !important;
         width: 340px !important;
     }
+    
     section[data-testid="stSidebar"] .stRadio div[role="radiogroup"] label {
         font-size: 15px !important;
         padding: 8px 4px !important;
         margin-bottom: 2px !important;
         border-radius: 6px !important;
     }
+    
     section[data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:hover {
         background-color: #f0f2f6 !important;
     }
     
-    /* Mobile responsiveness */
+    /* MOBILE: Make sidebar toggle BIG and clearly visible */
     @media (max-width: 768px) {
         .main-header { padding: 12px !important; }
         .main-header h1 { font-size: 22px !important; }
         .main-header p { font-size: 12px !important; }
+        
+        /* Show the sidebar collapse control button */
+        button[data-testid="stBaseButton-headerNoPadding"],
+        [data-testid="stSidebarCollapsedControl"] button,
+        [data-testid="collapsedControl"] button {
+            display: flex !important;
+            visibility: visible !important;
+            background-color: #1DB954 !important;
+            color: white !important;
+            width: 48px !important;
+            height: 48px !important;
+            border-radius: 50% !important;
+            box-shadow: 0 4px 12px rgba(29,185,84,0.5) !important;
+        }
+        
+        button[data-testid="stBaseButton-headerNoPadding"] svg,
+        [data-testid="stSidebarCollapsedControl"] button svg,
+        [data-testid="collapsedControl"] button svg {
+            fill: white !important;
+            color: white !important;
+        }
+        
         .stButton > button {
             width: 100% !important;
             min-height: 44px !important;
-            font-size: 14px !important;
-        }
-        .stTextInput > div > input {
-            min-height: 44px !important;
-            font-size: 16px !important;
-        }
-        .stSelectbox > div > div { min-height: 44px !important; }
-        .stFileUploader { padding: 10px !important; }
-        [data-testid="stMetricValue"] { font-size: 20px !important; }
-        [data-testid="stMetricLabel"] { font-size: 12px !important; }
-        .stDataFrame { font-size: 12px !important; }
-        .stTabs [data-baseweb="tab"] {
-            font-size: 13px !important;
-            padding: 8px 12px !important;
         }
     }
 </style>
