@@ -25,6 +25,53 @@ YOUTUBE_VIDEO = "https://www.youtube.com/watch?v=vh3ZD-YLqPo"
 
 st.set_page_config(page_title="Profit Guard", page_icon="rocket", layout="wide")
 
+# Force mobile sidebar toggle + hide GitHub badge
+st.markdown("""
+<script id="force-toggle-visible">
+(function() {
+    function hideGitHub() {
+        var links = document.querySelectorAll('header a[href*="github.com"], header a[href*="streamlit.io"]');
+        links.forEach(function(a) { a.style.display = 'none'; });
+        
+        var btns = document.querySelectorAll('header button');
+        btns.forEach(function(b) {
+            var title = (b.getAttribute('title') || '').toLowerCase();
+            var txt = (b.textContent || '').toLowerCase();
+            if (title.includes('github') || title.includes('manage') || title.includes('view app') || 
+                txt.includes('github') || txt.includes('manage')) {
+                b.style.display = 'none';
+            }
+        });
+    }
+    
+    function showToggle() {
+        var selectors = [
+            '[data-testid="stSidebarCollapsedControl"]',
+            '[data-testid="collapsedControl"]',
+            'button[data-testid="stBaseButton-headerNoPadding"]'
+        ];
+        selectors.forEach(function(sel) {
+            var el = document.querySelector(sel);
+            if (el) {
+                el.style.display = 'flex';
+                el.style.visibility = 'visible';
+                el.style.opacity = '1';
+                el.style.zIndex = '999999';
+            }
+        });
+    }
+    
+    hideGitHub();
+    showToggle();
+    
+    setInterval(function() {
+        hideGitHub();
+        showToggle();
+    }, 1000);
+})();
+</script>
+""", unsafe_allow_html=True)
+
 # Google Analytics - Measurement Protocol
 try:
     GA_ID = st.secrets["ga"]["measurement_id"]
@@ -84,7 +131,7 @@ def send_ga_event(event_name, params=None):
 
 st.markdown("""
 <style>
-    /* Hide ALL top-right and bottom-right Streamlit Cloud elements */
+    /* Hide top-right menu and footer ONLY - NOT the header */
     #MainMenu {visibility: hidden !important;}
     footer {visibility: hidden !important;}
     .stDeployButton {display: none !important;}
@@ -94,15 +141,52 @@ st.markdown("""
     [data-testid="stAppDeployButton"] {display: none !important;}
     [data-testid="stAppToolbar"] {display: none !important;}
     [data-testid="manage-app-button"] {display: none !important;}
-    [data-testid="stBaseButton-header"] {display: none !important;}
-    [data-testid="baseButton-header"] {display: none !important;}
-    button[title="View app source code"] {display: none !important;}
-    button[title="Manage app"] {display: none !important;}
-    a[href*="github.com"] {display: none !important;}
-    a[href*="streamlit.io"] img {display: none !important;}
-    iframe[title="Streamlit Cloud Status"] {display: none !important;}
-    [class*="StatusWidget"] {display: none !important;}
-    [class*="statuspage"] {display: none !important;}
+    
+    /* Hide GitHub edit/fork buttons (top-right) */
+    header a[href*="github.com"] {display: none !important;}
+    header a[href*="streamlit.io"] {display: none !important;}
+    header button[title*="View app"] {display: none !important;}
+    header button[title*="Manage app"] {display: none !important;}
+    header button[title*="Deploy"] {display: none !important;}
+    header .stDeployButton {display: none !important;}
+    
+    /* FIX: Force sidebar toggle button to be visible on mobile */
+    [data-testid="stSidebarCollapsedControl"],
+    [data-testid="collapsedControl"],
+    button[data-testid="stBaseButton-headerNoPadding"] {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        z-index: 999999 !important;
+        position: fixed !important;
+        top: 12px !important;
+        left: 12px !important;
+    }
+    
+    /* Make toggle button look nice */
+    [data-testid="stSidebarCollapsedControl"] button,
+    [data-testid="collapsedControl"] button,
+    button[data-testid="stBaseButton-headerNoPadding"] {
+        background-color: #1DB954 !important;
+        color: white !important;
+        border-radius: 50% !important;
+        width: 48px !important;
+        height: 48px !important;
+        border: 2px solid white !important;
+        box-shadow: 0 4px 12px rgba(29,185,84,0.5) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    [data-testid="stSidebarCollapsedControl"] svg,
+    [data-testid="collapsedControl"] svg,
+    button[data-testid="stBaseButton-headerNoPadding"] svg {
+        fill: white !important;
+        color: white !important;
+        width: 24px !important;
+        height: 24px !important;
+    }
     
     .main-header {
         background: linear-gradient(90deg, #1DB954 0%, #191414 100%);
@@ -127,6 +211,17 @@ st.markdown("""
     
     section[data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:hover {
         background-color: #f0f2f6 !important;
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .main-header { padding: 12px !important; }
+        .main-header h1 { font-size: 22px !important; }
+        .main-header p { font-size: 12px !important; }
+        .stButton > button {
+            width: 100% !important;
+            min-height: 44px !important;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
