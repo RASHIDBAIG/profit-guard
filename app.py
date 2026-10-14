@@ -180,14 +180,25 @@ def send_ga_event(event_name, params=None):
 
 st.markdown("""
 <style>
-    /* Hide only top-right menu and footer */
+    /* HIDE entire header (removes Share, Star, Edit, GitHub icons) */
+    header {
+        visibility: hidden;
+        height: 0;
+    }
+    
+    /* BUT keep sidebar toggle button visible */
+    header [data-testid="stSidebarCollapsedControl"],
+    header [data-testid="collapsedControl"],
+    header button[data-testid="stBaseButton-headerNoPadding"],
+    [data-testid="stSidebarCollapsedControl"],
+    [data-testid="collapsedControl"] {
+        visibility: visible !important;
+        display: block !important;
+    }
+    
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display: none;}
-    
-    /* Hide GitHub pin */
-    header a[href*="github.com"] {display: none !important;}
-    header a[href*="streamlit.io"] {display: none !important;}
     
     .main-header {
         background: linear-gradient(90deg, #1DB954 0%, #191414 100%);
