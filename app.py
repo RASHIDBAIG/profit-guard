@@ -1348,7 +1348,48 @@ elif option == "Admin (Private)":
                         with f3:
                             limit = st.number_input("Show last N rows", value=100, min_value=10, max_value=5000, step=50)
                         
+                        logs_df["_dt"] = pd.to_datetime(logs_df["timestamp"], errors="coerce")
+                        logs_df["_date"] = logs_df["_dt"].dt.date
+                        
+                        st.markdown("#### Date Filter")
+                        d1, d2, d3 = st.columns(3)
+                        with d1:
+                            date_preset = st.selectbox(
+                                "Quick Range",
+                                ["All Time", "Today", "Yesterday", "Last 7 Days", "Last 30 Days", "Custom Range"]
+                            )
+                        with d2:
+                            unique_dates = sorted([d for d in logs_df["_date"].dropna().unique()], reverse=True)
+                            if len(unique_dates) > 0:
+                                date_start = st.date_input("From", value=unique_dates[-1])
+                            else:
+                                date_start = st.date_input("From")
+                        with d3:
+                            if len(unique_dates) > 0:
+                                date_end = st.date_input("To", value=unique_dates[0])
+                            else:
+                                date_end = st.date_input("To")
+                        
+                        today = pd.Timestamp.now().date()
+                        if date_preset == "Today":
+                            date_start = today
+                            date_end = today
+                        elif date_preset == "Yesterday":
+                            date_start = today - pd.Timedelta(days=1)
+                            date_end = today - pd.Timedelta(days=1)
+                        elif date_preset == "Last 7 Days":
+                            date_start = today - pd.Timedelta(days=7)
+                            date_end = today
+                        elif date_preset == "Last 30 Days":
+                            date_start = today - pd.Timedelta(days=30)
+                            date_end = today
                         filtered = logs_df.copy()
+                        
+                        if date_preset != "All Time":
+                            filtered = filtered[
+                                (filtered["_date"] >= date_start) & 
+                                (filtered["_date"] <= date_end)
+                            ]
                         if filter_action != "All" and "action" in filtered.columns:
                             filtered = filtered[filtered["action"] == filter_action]
                         if filter_session != "All" and "session_id" in filtered.columns:
