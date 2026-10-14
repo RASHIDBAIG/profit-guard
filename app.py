@@ -25,51 +25,94 @@ YOUTUBE_VIDEO = "https://www.youtube.com/watch?v=vh3ZD-YLqPo"
 
 st.set_page_config(page_title="Profit Guard", page_icon="rocket", layout="wide", initial_sidebar_state="expanded")
 
-# Hide Streamlit Cloud top-right icons
+# Keep sidebar toggle button always visible and stable
 st.markdown("""
-<script id="hide-streamlit-icons">
+<script id="stable-toggle-button">
 (function() {
-    function hideIcons() {
-        // Hide Share, Star, Edit, GitHub icons
+    function makeToggleVisible() {
         var selectors = [
-            '[data-testid="stToolbar"]',
-            '[data-testid="stAppToolbar"]',
-            '[data-testid="stToolbarActions"]',
-            '.stAppToolbar',
-            '[data-testid="stManageApp"]',
-            'header a[href*="github"]',
-            'header a[href*="streamlit"]',
+            '[data-testid="stSidebarCollapsedControl"]',
+            '[data-testid="collapsedControl"]',
+            'button[data-testid="stBaseButton-headerNoPadding"]'
         ];
         
         selectors.forEach(function(sel) {
-            document.querySelectorAll(sel).forEach(function(el) {
-                el.style.display = 'none';
-                el.style.visibility = 'hidden';
-            });
-        });
-        
-        // Hide buttons with text "Share" or "Star"
-        document.querySelectorAll('header button, header a').forEach(function(el) {
-            var txt = (el.textContent || '').trim().toLowerCase();
-            var href = (el.getAttribute('href') || '').toLowerCase();
-            var title = (el.getAttribute('title') || '').toLowerCase();
-            var aria = (el.getAttribute('aria-label') || '').toLowerCase();
-            
-            if (txt === 'share' || txt === 'star' || 
-                href.includes('github') || href.includes('streamlit') ||
-                title.includes('share') || title.includes('edit') || title.includes('manage') ||
-                aria.includes('share') || aria.includes('edit') || aria.includes('manage')) {
-                el.style.display = 'none';
+            var el = document.querySelector(sel);
+            if (el) {
+                el.style.setProperty('display', 'flex', 'important');
+                el.style.setProperty('visibility', 'visible', 'important');
+                el.style.setProperty('opacity', '1', 'important');
+                el.style.setProperty('pointer-events', 'auto', 'important');
+                el.style.setProperty('z-index', '99999', 'important');
+                
+                var btn = el.tagName === 'BUTTON' ? el : el.querySelector('button');
+                if (btn) {
+                    btn.style.setProperty('display', 'flex', 'important');
+                    btn.style.setProperty('visibility', 'visible', 'important');
+                    btn.style.setProperty('opacity', '1', 'important');
+                    btn.style.setProperty('pointer-events', 'auto', 'important');
+                    btn.style.setProperty('background-color', '#1DB954', 'important');
+                    btn.style.setProperty('color', 'white', 'important');
+                    btn.style.setProperty('border-radius', '50%', 'important');
+                    btn.style.setProperty('width', '48px', 'important');
+                    btn.style.setProperty('height', '48px', 'important');
+                }
             }
         });
     }
     
-    // Run immediately and repeatedly
-    hideIcons();
-    setTimeout(hideIcons, 500);
-    setTimeout(hideIcons, 1500);
-    setTimeout(hideIcons, 3000);
-    setInterval(hideIcons, 2000);
+    function hideIcons() {
+        var selectors = [
+            '[data-testid="stToolbar"]',
+            '[data-testid="stToolbarActions"]',
+            '[data-testid="stAppToolbar"]',
+            '[data-testid="stStatusWidget"]',
+            '[data-testid="stDecoration"]',
+            '[data-testid="manage-app-button"]',
+            '[data-testid="stAppDeployButton"]'
+        ];
+        
+        selectors.forEach(function(sel) {
+            document.querySelectorAll(sel).forEach(function(el) {
+                el.style.setProperty('display', 'none', 'important');
+            });
+        });
+        
+        document.querySelectorAll('header a, header button').forEach(function(el) {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            var txt = (el.textContent || '').trim().toLowerCase();
+            if (href.includes('github') || href.includes('streamlit') ||
+                txt === 'share' || txt === 'star' || txt === 'manage') {
+                el.style.setProperty('display', 'none', 'important');
+            }
+        });
+    }
+    
+    function runAll() {
+        makeToggleVisible();
+        hideIcons();
+    }
+    
+    // Run on load
+    runAll();
+    
+    // Watch for DOM changes (Streamlit re-renders)
+    var observer = new MutationObserver(function() {
+        runAll();
+    });
+    
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['style', 'class']
+    });
+    
+    // Also run repeatedly as fallback
+    setInterval(runAll, 300);
+    setTimeout(runAll, 100);
+    setTimeout(runAll, 500);
+    setTimeout(runAll, 1500);
 })();
 </script>
 """, unsafe_allow_html=True)
