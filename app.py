@@ -223,7 +223,7 @@ def send_ga_event(event_name, params=None):
 
 st.markdown("""
 <style>
-    /* Hide only menu and footer */
+    /* Hide menu and footer */
     #MainMenu {visibility: hidden !important;}
     footer {visibility: hidden !important;}
     .stDeployButton {display: none !important;}
@@ -239,50 +239,65 @@ st.markdown("""
     header a[href*="github.com"] {display: none !important;}
     header a[href*="streamlit.io"] {display: none !important;}
     
-    /* ===== SIDEBAR TOGGLE - ALWAYS OUTSIDE, VERTICALLY CENTERED ===== */
+    /* ===== SIDEBAR with green border ===== */
+    section[data-testid="stSidebar"] {
+        min-width: 340px !important;
+        max-width: 340px !important;
+        width: 340px !important;
+        border-right: 4px solid #1DB954 !important;
+        box-shadow: 4px 0 20px rgba(29,185,84,0.3) !important;
+        position: relative !important;
+    }
     
-    /* Button when sidebar is CLOSED */
+    /* ===== TOGGLE BUTTON - On the sidebar border, vertically centered ===== */
+    
+    /* When sidebar is CLOSED */
     [data-testid="stSidebarCollapsedControl"],
     [data-testid="collapsedControl"] {
         display: flex !important;
         visibility: visible !important;
         opacity: 1 !important;
         z-index: 999999 !important;
-        top: 50% !important;
-        transform: translateY(-50%) !important;
         position: fixed !important;
-        left: 10px !important;
+        top: 50% !important;
+        left: 336px !important;
+        transform: translateY(-50%) !important;
         background-color: #1DB954 !important;
         border-radius: 50% !important;
-        width: 44px !important;
-        height: 44px !important;
-        box-shadow: 0 4px 12px rgba(29,185,84,0.5) !important;
-        border: 2px solid white !important;
+        width: 40px !important;
+        height: 40px !important;
+        box-shadow: 0 4px 12px rgba(29,185,84,0.6) !important;
+        border: 3px solid white !important;
         align-items: center !important;
         justify-content: center !important;
+        transition: all 0.3s ease !important;
     }
     
-    /* Button when sidebar is OPEN - move it OUTSIDE the sidebar */
+    /* When sidebar is OPEN - button stays on border */
     [data-testid="stSidebarCollapseButton"] {
         position: fixed !important;
         top: 50% !important;
-        left: 340px !important;
+        left: 322px !important;
         transform: translateY(-50%) !important;
         z-index: 999999 !important;
         background-color: #1DB954 !important;
         border-radius: 50% !important;
-        width: 44px !important;
-        height: 44px !important;
-        box-shadow: 0 4px 12px rgba(29,185,84,0.5) !important;
-        border: 2px solid white !important;
+        width: 40px !important;
+        height: 40px !important;
+        box-shadow: 0 4px 12px rgba(29,185,84,0.6) !important;
+        border: 3px solid white !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        transition: all 0.3s ease !important;
     }
     
-    [data-testid="stSidebarCollapseButton"]:hover {
+    [data-testid="stSidebarCollapseButton"]:hover,
+    [data-testid="stSidebarCollapsedControl"]:hover,
+    [data-testid="collapsedControl"]:hover {
         background-color: #16a34a !important;
-        transform: translateY(-50%) scale(1.1) !important;
+        transform: translateY(-50%) scale(1.15) !important;
+        box-shadow: 0 6px 20px rgba(29,185,84,0.8) !important;
     }
     
     [data-testid="stSidebarCollapseButton"] button,
@@ -292,6 +307,8 @@ st.markdown("""
         border: none !important;
         color: white !important;
         padding: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
     }
     
     [data-testid="stSidebarCollapseButton"] svg,
@@ -299,15 +316,22 @@ st.markdown("""
     [data-testid="collapsedControl"] svg {
         fill: white !important;
         color: white !important;
-        width: 22px !important;
-        height: 22px !important;
+        width: 20px !important;
+        height: 20px !important;
     }
     
-    /* Hide the OLD inside-sidebar collapse button */
-    [data-testid="stSidebarHeader"] [data-testid="stSidebarCollapseButton"],
-    section[data-testid="stSidebar"] > div:first-child > button {
+    /* Hide the inside-header collapse button */
+    section[data-testid="stSidebar"] [data-testid="stSidebarHeader"] button {
         position: fixed !important;
-        left: 340px !important;
+        top: 50% !important;
+        left: 322px !important;
+        transform: translateY(-50%) !important;
+        background-color: #1DB954 !important;
+        border-radius: 50% !important;
+        width: 40px !important;
+        height: 40px !important;
+        border: 3px solid white !important;
+        z-index: 999999 !important;
     }
     
     .main-header {
@@ -316,12 +340,6 @@ st.markdown("""
         border-radius: 10px;
         color: white;
         margin-bottom: 20px;
-    }
-    
-    section[data-testid="stSidebar"] {
-        min-width: 340px !important;
-        max-width: 340px !important;
-        width: 340px !important;
     }
     
     section[data-testid="stSidebar"] .stRadio div[role="radiogroup"] label {
@@ -346,16 +364,22 @@ st.markdown("""
         }
         
         [data-testid="stSidebarCollapsedControl"],
-        [data-testid="collapsedControl"],
-        [data-testid="stSidebarCollapseButton"] {
-            width: 50px !important;
-            height: 50px !important;
+        [data-testid="collapsedControl"] {
             left: 10px !important;
+            top: 15px !important;
+            transform: none !important;
+            width: 48px !important;
+            height: 48px !important;
         }
         
-        [data-testid="stSidebarCollapseButton"] {
+        [data-testid="stSidebarCollapseButton"],
+        section[data-testid="stSidebar"] [data-testid="stSidebarHeader"] button {
             left: auto !important;
             right: 10px !important;
+            top: 15px !important;
+            transform: none !important;
+            width: 48px !important;
+            height: 48px !important;
         }
     }
 </style>
