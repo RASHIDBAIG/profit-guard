@@ -25,21 +25,43 @@ YOUTUBE_VIDEO = "https://www.youtube.com/watch?v=vh3ZD-YLqPo"
 
 st.set_page_config(page_title="Profit Guard", page_icon="rocket", layout="wide")
 
-# Google Analytics
+# Google Analytics - Measurement Protocol
 try:
     GA_ID = st.secrets["ga"]["measurement_id"]
-    st.markdown(
-        "<script async src='https://www.googletagmanager.com/gtag/js?id=" + GA_ID + "'></script>"
-        "<script>"
-        "window.dataLayer = window.dataLayer || [];"
-        "function gtag(){dataLayer.push(arguments);}"
-        "gtag('js', new Date());"
-        "gtag('config', '" + GA_ID + "');"
-        "</script>",
-        unsafe_allow_html=True
-    )
 except Exception:
-    pass
+    GA_ID = ""
+
+try:
+    GA_API_SECRET = st.secrets["ga"]["api_secret"]
+except Exception:
+    GA_API_SECRET = ""
+
+import random
+if "ga_client_id" not in st.session_state:
+    st.session_state.ga_client_id = str(random.randint(1000000000, 9999999999)) + "." + str(int(pd.Timestamp.now().timestamp()))
+
+GA_CLIENT_ID = st.session_state.ga_client_id
+
+def send_ga_event(event_name, params=None):
+    if not GA_ID or not GA_API_SECRET:
+        return
+    try:
+        url = "https://www.google-analytics.com/mp/collect"
+        p = params or {}
+        p["session_id"] = SESSION_ID
+        p["engagement_time_msec"] = "100"
+        payload = {
+            "client_id": GA_CLIENT_ID,
+            "events": [{"name": event_name, "params": p}]
+        }
+        requests.post(
+            url,
+            params={"measurement_id": GA_ID, "api_secret": GA_API_SECRET},
+            json=payload,
+            timeout=3
+        )
+    except Exception:
+        pass
 
 st.markdown("""
 <style>
@@ -104,20 +126,7 @@ def get_user_info():
         return "unknown", "unknown"
 
 def track_event(event_name, params=None):
-    try:
-        p = params or {}
-        p['session_id'] = SESSION_ID
-        p_json = json.dumps(p)
-        st.markdown(
-            "<script>"
-            "if (typeof gtag !== 'undefined') {"
-            "gtag('event', '" + event_name + "', " + p_json + ");"
-            "}"
-            "</script>",
-            unsafe_allow_html=True
-        )
-    except Exception:
-        pass
+    send_ga_event(event_name, params)
 
 def log_to_sheet(action, details=""):
     try:
