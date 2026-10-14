@@ -131,16 +131,10 @@ def send_ga_event(event_name, params=None):
 
 st.markdown("""
 <style>
-    /* Hide top-right menu and footer */
-    #MainMenu {visibility: hidden !important;}
-    footer {visibility: hidden !important;}
-    .stDeployButton {display: none !important;}
-    [data-testid="stToolbar"] {display: none !important;}
-    [data-testid="stDecoration"] {display: none !important;}
-    [data-testid="stStatusWidget"] {display: none !important;}
-    [data-testid="stAppDeployButton"] {display: none !important;}
-    [data-testid="stAppToolbar"] {display: none !important;}
-    [data-testid="manage-app-button"] {display: none !important;}
+    /* Hide only top-right menu and footer */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    .stDeployButton {display: none;}
     
     /* Hide GitHub pin */
     header a[href*="github.com"] {display: none !important;}
@@ -171,7 +165,7 @@ st.markdown("""
         background-color: #f0f2f6 !important;
     }
     
-    /* ===== MOBILE: Style the toggle button (only when sidebar is collapsed) ===== */
+    /* Mobile responsiveness */
     @media (max-width: 768px) {
         .main-header { padding: 12px !important; }
         .main-header h1 { font-size: 22px !important; }
@@ -179,26 +173,6 @@ st.markdown("""
         .stButton > button {
             width: 100% !important;
             min-height: 44px !important;
-        }
-        
-        /* Green circular toggle button on mobile */
-        [data-testid="stSidebarCollapsedControl"] button,
-        [data-testid="collapsedControl"] button,
-        button[data-testid="stBaseButton-headerNoPadding"] {
-            background-color: #1DB954 !important;
-            color: white !important;
-            border-radius: 50% !important;
-            width: 48px !important;
-            height: 48px !important;
-            border: 2px solid white !important;
-            box-shadow: 0 4px 12px rgba(29,185,84,0.5) !important;
-        }
-        
-        [data-testid="stSidebarCollapsedControl"] svg,
-        [data-testid="collapsedControl"] svg,
-        button[data-testid="stBaseButton-headerNoPadding"] svg {
-            fill: white !important;
-            color: white !important;
         }
     }
 </style>
