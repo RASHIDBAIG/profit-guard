@@ -84,16 +84,25 @@ def send_ga_event(event_name, params=None):
 
 st.markdown("""
 <style>
-    /* Hide top-right menu and footer only - NOT the header */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
+    /* Hide ALL top-right and bottom-right Streamlit Cloud elements */
+    #MainMenu {visibility: hidden !important;}
+    footer {visibility: hidden !important;}
     .stDeployButton {display: none !important;}
     [data-testid="stToolbar"] {display: none !important;}
     [data-testid="stDecoration"] {display: none !important;}
     [data-testid="stStatusWidget"] {display: none !important;}
     [data-testid="stAppDeployButton"] {display: none !important;}
+    [data-testid="stAppToolbar"] {display: none !important;}
+    [data-testid="manage-app-button"] {display: none !important;}
     [data-testid="stBaseButton-header"] {display: none !important;}
     [data-testid="baseButton-header"] {display: none !important;}
+    button[title="View app source code"] {display: none !important;}
+    button[title="Manage app"] {display: none !important;}
+    a[href*="github.com"] {display: none !important;}
+    a[href*="streamlit.io"] img {display: none !important;}
+    iframe[title="Streamlit Cloud Status"] {display: none !important;}
+    [class*="StatusWidget"] {display: none !important;}
+    [class*="statuspage"] {display: none !important;}
     
     .main-header {
         background: linear-gradient(90deg, #1DB954 0%, #191414 100%);
@@ -118,39 +127,6 @@ st.markdown("""
     
     section[data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:hover {
         background-color: #f0f2f6 !important;
-    }
-    
-    /* MOBILE: Make sidebar toggle BIG and clearly visible */
-    @media (max-width: 768px) {
-        .main-header { padding: 12px !important; }
-        .main-header h1 { font-size: 22px !important; }
-        .main-header p { font-size: 12px !important; }
-        
-        /* Show the sidebar collapse control button */
-        button[data-testid="stBaseButton-headerNoPadding"],
-        [data-testid="stSidebarCollapsedControl"] button,
-        [data-testid="collapsedControl"] button {
-            display: flex !important;
-            visibility: visible !important;
-            background-color: #1DB954 !important;
-            color: white !important;
-            width: 48px !important;
-            height: 48px !important;
-            border-radius: 50% !important;
-            box-shadow: 0 4px 12px rgba(29,185,84,0.5) !important;
-        }
-        
-        button[data-testid="stBaseButton-headerNoPadding"] svg,
-        [data-testid="stSidebarCollapsedControl"] button svg,
-        [data-testid="collapsedControl"] button svg {
-            fill: white !important;
-            color: white !important;
-        }
-        
-        .stButton > button {
-            width: 100% !important;
-            min-height: 44px !important;
-        }
     }
 </style>
 """, unsafe_allow_html=True)
