@@ -23,7 +23,7 @@ YOUR_UBL = "PK67UNIL0109000337172553"
 GITHUB_RAW = "https://raw.githubusercontent.com/RASHIDBAIG/profit-guard/main"
 YOUTUBE_VIDEO = "https://www.youtube.com/watch?v=vh3ZD-YLqPo"
 
-st.set_page_config(page_title="Profit Guard", page_icon="rocket", layout="wide")
+st.set_page_config(page_title="Profit Guard", page_icon="rocket", layout="wide", initial_sidebar_state="expanded")
 
 # Force mobile sidebar toggle + hide GitHub badge
 st.markdown("""
@@ -171,16 +171,7 @@ st.markdown("""
         background-color: #f0f2f6 !important;
     }
     
-    /* ===== DESKTOP (PC): Hide toggle button - sidebar is always open ===== */
-    @media (min-width: 769px) {
-        [data-testid="stSidebarCollapsedControl"],
-        [data-testid="collapsedControl"],
-        button[data-testid="stBaseButton-headerNoPadding"] {
-            display: none !important;
-        }
-    }
-    
-    /* ===== MOBILE: Show toggle button (only when sidebar is collapsed) ===== */
+    /* ===== MOBILE: Style the toggle button (only when sidebar is collapsed) ===== */
     @media (max-width: 768px) {
         .main-header { padding: 12px !important; }
         .main-header h1 { font-size: 22px !important; }
@@ -190,7 +181,7 @@ st.markdown("""
             min-height: 44px !important;
         }
         
-        /* Style the toggle button to be visible and tappable */
+        /* Green circular toggle button on mobile */
         [data-testid="stSidebarCollapsedControl"] button,
         [data-testid="collapsedControl"] button,
         button[data-testid="stBaseButton-headerNoPadding"] {
