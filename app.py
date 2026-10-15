@@ -1553,10 +1553,16 @@ elif option == "Admin (Private)":
                         
                         f1, f2, f3 = st.columns(3)
                         with f1:
-                            actions = ["All"] + sorted(logs_df["action"].unique().tolist()) if "action" in logs_df.columns else ["All"]
+                            if "action" in logs_df.columns:
+                                actions = ["All"] + sorted([str(x) for x in logs_df["action"].dropna().unique().tolist()])
+                            else:
+                                actions = ["All"]
                             filter_action = st.selectbox("Filter by Action", actions)
                         with f2:
-                            sessions = ["All"] + sorted(logs_df["session_id"].unique().tolist()) if "session_id" in logs_df.columns else ["All"]
+                            if "session_id" in logs_df.columns:
+                                sessions = ["All"] + sorted([str(x) for x in logs_df["session_id"].dropna().unique().tolist()])
+                            else:
+                                sessions = ["All"]
                             filter_session = st.selectbox("Filter by Session", sessions)
                         with f3:
                             limit = st.number_input("Show last N rows", value=100, min_value=10, max_value=5000, step=50)
